@@ -1,0 +1,29 @@
+--- 
+- 
+  name: "Update the OS - CentOS Machines ..."
+  when: "ansible_distribution == 'CentOS'"
+  yum: "name=* state=latest"
+- 
+  apt: upgrade=dist
+  name: "Update the OS - Ubuntu Machines ..."
+  when: "ansible_distribution == 'Ubuntu'"
+- 
+  name: "Install epel-release repo (CentOS machines) ..."
+  when: "ansible_distribution == 'CentOS'"
+  yum: "pkg=epel-release state=latest"
+- 
+  name: "Installing Fail2Ban (CentOS machines)..."
+  when: "ansible_distribution == 'CentOS'"
+  yum: "pkg={{ item }} state=latest"
+  with_items: 
+    - fail2ban
+    - fail2ban-systemd
+- 
+  apt: "pkg=fail2ban state=latest"
+  name: "Installing Fail2Ban (Ubuntu Machines)..."
+  when: "ansible_distribution == 'Ubuntu'"
+- 
+  name: "Install config and restart service ..."
+  notify: 
+    - "reload fail2ban"
+  template: "src=jail.local.j2 dest=/etc/fail2ban/jail.local"

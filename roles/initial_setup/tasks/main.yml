@@ -17,7 +17,6 @@
   yum: "pkg={{ item }} state=latest"
   with_items: 
     - fail2ban
-    - fail2ban-systemd
 - 
   apt: "pkg=fail2ban state=latest"
   name: "Installing Fail2Ban (Ubuntu Machines)..."

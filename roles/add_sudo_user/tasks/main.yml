@@ -1,0 +1,13 @@
+--- 
+- 
+  include_vars: main.yml
+- 
+  name: "Adding new user kelvin"
+  user: "name={{ new_sudo_user }} password={{ new_sudo_user_password }}"
+- 
+  name: "Granting sudo rights to user kelvin"
+  template: "src=sudoers.j2 dest=/etc/sudoers"
+-
+  name: "Disabling root access"
+  template: "src=sshd_config.j2 dest=/etc/ssh/sshd_config"
+  notify: "Restart SSHD"

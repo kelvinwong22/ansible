@@ -1,7 +1,7 @@
----
-fail2ban:
-  config:
-    ignoreip: 127.0.0.1/8
+--- 
+fail2ban: 
+  config: 
     bantime: 3600
-    maxretry: 3
     destemail: k.wong21@gmail.com
+    ignoreip: 127.0.0.1/8
+    maxretry: 3

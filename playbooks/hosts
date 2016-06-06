@@ -1,3 +1,0 @@
-[monitoring]
-monitor-phx ansible_ssh_host=monitor-phx.kelvinsblog.com
-

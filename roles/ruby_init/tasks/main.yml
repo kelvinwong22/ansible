@@ -1,0 +1,22 @@
+--- 
+- 
+  name: "Install the 'Development tools' package group"
+  yum: "name='@Development tools' state=present"
+  sudo: yes
+- 
+  name: "Downloading and install RVM"
+  shell: "curl -L get.rvm.io | bash -s stable"
+- 
+  @todo - add a line to the /home/vagrant/.bash_profile
+        - source ~/.profile
+
+  @todo - run this command source ~/.profile
+  
+  name: "Reload RVM"
+  shell: "rvm reload"
+-
+  name: "RVM install 2.1.0"
+  shell: "rvm install 2.1.0"
+- 
+  name: "Set 2.1.0 as deafault ruby"
+  shell: "rvm use 2.1.0 --default"

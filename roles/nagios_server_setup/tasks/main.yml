@@ -1,0 +1,66 @@
+---
+- include_vars: main.yml
+
+- name: "Installing dependancies for Nagios ..."
+  yum: "pkg={{ item }} state=latest"
+  with_items:
+  - httpd
+  - php
+  - gcc
+  - glibc
+  - glibc-common
+  - gd
+  - gd-devel
+  - perl
+  - perl-devel
+  sudo: yes
+
+- name: "Creating group nagcmd"
+  group: name=nagcmd state=present
+  sudo: yes
+
+- name: "Creating user nagios and adding to nagcmd group"
+  user: "name=nagios password={{ nagios_password }} group=nagcmd"
+  sudo: yes
+
+- name: "Adding apache user to nagcmd group"
+  user: "name=apache group=nagcmd"
+  sudo: yes
+
+- name: "Creating a directory for downloading Nagios files"
+  file: path=/home/root/downloads state=directory mode=0755
+  sudo: yes
+
+- name: "Downloading Nagios source files"
+  get_url: url=http://prdownloads.sourceforge.net/sourceforge/nagios/nagios-4.0.8.tar.gz dest=/home/root/downloads
+  become: yes
+  become_user: root
+
+- name: "Downloading Nagios Plug-in source files"
+  get_url: url=http://www.nagios-plugins.org/download/nagios-plugins-2.0.3.tar.gz dest=/home/root/downloads
+  become: yes
+  become_user: root
+
+- name: "Unpacking Nagios core tarball"
+  unarchive: src=/home/root/downloads/nagios-4.0.8.tar.gz dest=/home/root/downloads/ copy=no
+  become: yes
+  become_user: root
+
+- name: "Run Nagios configure script"
+  shell: cd /home/root/downloads/nagios-4.0.8 && ./configure --with-command-group=nagcmd
+  sudo: yes
+
+- name: "Compile Nagios source"
+  shell: cd /home/root/downloads/nagios-4.0.8 && make all
+  sudo: yes
+
+- name: "Install binaries, init script, sample config files and set permissions"
+  shell: cd /home/root/downloads/nagios-4.0.8 && make {{ item }}
+  with_items:
+  - install
+  - install-init
+  - install-config
+  - install-commandmode
+  sudo: yes
+
+

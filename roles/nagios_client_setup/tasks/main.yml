@@ -1,0 +1,49 @@
+---
+- name: "Get epel-release-6-8 from RPM..."
+  yum: name=http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm state=present
+  sudo: yes
+
+- name: "Get remi-replease-6 from RPM..."
+  yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
+  sudo: yes
+
+- name: "Installing dependancies for Nagios client..."
+  yum: "pkg={{ item }} state=latest"
+  with_items:
+  - nagios
+  - nagios-plugins-all
+  - nrpe
+  sudo: yes
+
+- name: "Run NRPE is running and will start with boot"
+  command: /sbin/chkconfig nrpe on
+  sudo: yes
+
+- name: "Uploading nrpe.cfg template to host.. "
+  template: src=nrpe.cfg.j2 dest=/etc/nagios/nrpe.cfg
+  sudo: yes
+
+- name: "Adding new chain to iptables for NRPE"
+  command: /sbin/iptables -N NRPE
+  sudo: yes
+
+- name: "Adding input rule for tcp port 5666"
+  command: /sbin/iptables -I INPUT -s 0/0 -p tcp --dport 5666 -j NRPE
+  sudo: yes
+
+- name: "Accept connections from Nagios server machine"
+  command: "/sbin/iptables -I NRPE -s {{nagios.allowed_host}} -j ACCEPT"
+  sudo: yes
+
+- name: "Append to NPRE chain"
+  command: /sbin/iptables -A NRPE -s 0/0 -j DROP
+  sudo: yes
+
+- name: "Save iptable rules"
+  command: /etc/init.d/iptables save
+  sudo: yes
+
+- name: "Start NRPE server"
+  service: "name=nrpe state=started"
+  sudo: yes
+

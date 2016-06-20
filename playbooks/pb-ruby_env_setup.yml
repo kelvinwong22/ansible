@@ -1,0 +1,6 @@
+--- 
+- 
+  hosts: dev_web
+  remote_user: root
+  roles: 
+    - ruby_init

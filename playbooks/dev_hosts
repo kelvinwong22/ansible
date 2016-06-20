@@ -1,0 +1,9 @@
+[dev_web_local]
+vagrant-web ansible_ssh_user=vagrant ansible_ssh_port=2222 ansible_ssh_host=127.0.0.1
+
+[dev_web_vps]
+ws-dev1 ansible_ssh_port=27303 ansible_ssh_host=104.160.46.155
+
+[dev:children]
+dev_web_local
+dev_web_vps

@@ -1,22 +1,45 @@
 --- 
 - 
-  name: "Install the 'Development tools' package group"
-  yum: "name='@Development tools' state=present"
+  name: "Perform an update for all packages..."
+  apt: update_cache=yes
   sudo: yes
 - 
-  name: "Downloading and install RVM"
-  shell: "curl -L get.rvm.io | bash -s stable"
-- 
-  @todo - add a line to the /home/vagrant/.bash_profile
-        - source ~/.profile
-
-  @todo - run this command source ~/.profile
-  
-  name: "Reload RVM"
-  shell: "rvm reload"
+  name: "Perform an upgrade for all packages..."
+  apt: upgrade=dist
+  sudo: yes
 -
-  name: "RVM install 2.1.0"
-  shell: "rvm install 2.1.0"
+  name: "Install Ruby via repository..."
+  apt: name=ruby-full state=present
+  sudo: yes
 - 
-  name: "Set 2.1.0 as deafault ruby"
-  shell: "rvm use 2.1.0 --default"
+  name: "Install dependances for PostgreSQL"
+  apt: "name={{ item }} state=present"
+  with_items:
+  - python-psycopg2
+  - libpq5
+  - libpq-dev
+  - git
+  - gcc
+  sudo: yes
+-
+  name: "Install PostgreSQL..."
+  apt: "name={{ item }} state=present"
+  with_items:
+  - postgresql-9.4
+  - postgresql-client-9.4
+  sudo: yes
+-
+ name: "Install gem bundler..."
+ gem: name=bundle state=latest
+ sudo: yes
+-
+ name: "Create a PostgreSQL user and assign the user to the database created..."
+ postgresql_user: db=WeddingApp name=twapp encrypted=true password=md5635848396f0b0ebcd06af458e935e406 priv=ALL 
+ sudo: yes 
+ sudo_user: postgres
+-
+ name: "Create the database for the app.."
+ postgresql_db: name=WeddingApp login_user=postgres owner=twapp
+ sudo: yes
+ sudo_user: postgres 
+

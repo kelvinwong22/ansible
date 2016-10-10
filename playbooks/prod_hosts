@@ -1,0 +1,13 @@
+[monitoring]
+monitor-phx ansible_ssh_host=monitor-phx.kelvinsblog.com
+
+[webservers]
+195.154.115.166
+
+[virtualizations]
+vz1-atl ansible_ssh_host=vz1-atl.shibatek.ca
+
+[fileshares]
+jupiter-fs ansible_ssh_host=jupiter-fs.shibatek.ca
+mercury-fs ansible_ssh_host=mercury-fs.shibatek.ca
+venus-fs ansible_ssh_host=venus-fs.shibatek.ca

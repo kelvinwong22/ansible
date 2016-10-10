@@ -1,0 +1,3 @@
+backup_user: backup-ftp
+backup_ftp_password: $6$rounds=656000$zyozNyBcX0l9IyRr$TUarhAC8kto1GUsJ/1yTntWSGZVw5CcGOuAiB9RMjIyBqH.yXBx5Cy8ljD/e.Hr8BnCu9kk/6NZItQWhzYLoW0
+existing_sudo_user: kelvin

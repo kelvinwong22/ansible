@@ -1,0 +1,21 @@
+--- 
+- 
+  name: "Install vsftp from repo..."
+  yum: "pkg={{ item }} state=latest"
+  with_items:
+    - vsftpd
+- 
+  name: "Copying vsftpd conf file to remote..."
+  copy: "src=vsftpd.conf dest=/etc/vsftpd/vsftpd.conf backup=yes"
+- 
+  name: "Creating new user backup-ftp..."
+  user: "name={{ backup_user }} password={{ backup_ftp_password }}"
+- 
+  name: "Starting the vsftpd service and ensuring it starts on boot..."
+  service: "name=vsftpd state=reloaded enabled=yes"
+- 
+  name: "Allow SSH for backup-ftp user..."
+  template: "src=sudoers.j2 dest=/etc/sudoers backup=yes"
+-
+  name: "Restarting SSHD service..."
+  service: "name=sshd state=reloaded"

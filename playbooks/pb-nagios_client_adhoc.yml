@@ -1,0 +1,5 @@
+--- 
+- 
+  hosts: webservers
+  roles: 
+    - nagios_client_setup

@@ -1,6 +1,6 @@
 --- 
 - 
-  hosts: dev_web
-  remote_user: root
+  hosts: ruby_web
+  remote_user: vagrant
   roles: 
     - ruby_init
